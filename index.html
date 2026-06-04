@@ -3,229 +3,503 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CSM | Ultra Smart Email Broadcaster</title>
+  <title>CSM | Premium Email Platform</title>
   <style>
     :root {
-      --bg-color: #06060c;
-      --card-bg: #0d0d1a;
-      --accent-color: #00ffcc;
-      --accent-dim: #00b38f;
-      --text-color: #ffffff;
-      --border-color: #1a1a3a;
+      --bg-gradient: linear-gradient(135deg, #080810 0%, #030307 100%);
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.06);
+      --accent: #00ffcc;
+      --accent-glow: rgba(0, 255, 204, 0.4);
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
     }
+
     body {
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       margin: 0;
-      padding: 20px;
+      min-height: 100vh;
+      padding: 30px 15px;
+      box-sizing: border-box;
     }
-    .container {
-      max-width: 1200px;
+
+    .app-container {
+      max-width: 1350px;
       margin: 0 auto;
     }
+
+    /* Header Design */
     header {
       text-align: center;
-      margin-bottom: 25px;
-      padding-bottom: 15px;
-      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 40px;
+      position: relative;
     }
+
     header h1 {
-      color: var(--accent-color);
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 2px;
       margin: 0;
-      font-size: 26px;
-      text-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
+      background: linear-gradient(to right, #fff, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
-    .grid {
+
+    .typing-effect {
+      font-size: 13px;
+      color: var(--text-muted);
+      border-right: 2px solid var(--accent);
+      white-space: nowrap;
+      margin: 8px auto 0 auto;
+      width: fit-content;
+      animation: typing 3.5s steps(40, end) infinite, blink .75s step-end infinite;
+      overflow: hidden;
+    }
+
+    /* Grid Layout */
+    .app-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 25px;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 30px;
     }
-    @media (max-width: 900px) {
-      .grid { grid-template-columns: 1fr; }
+
+    @media (max-width: 1024px) {
+      .app-grid { grid-template-columns: 1fr; }
     }
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 25px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+
+    /* Glass Panels */
+    .glass-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      transition: transform 0.3s ease;
     }
-    .form-group {
-      margin-bottom: 18px;
+
+    .panel-title {
+      font-size: 18px;
+      color: var(--accent);
+      margin-top: 0;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
     }
+
+    /* Form Controls */
+    .form-row {
+      display: flex;
+      gap: 20px;
+    }
+    .form-row .form-group { flex: 1; }
+
+    .form-group { margin-bottom: 20px; }
+
     label {
       display: block;
-      margin-bottom: 6px;
-      color: var(--accent-color);
-      font-size: 13px;
+      font-size: 11px;
+      color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
+      margin-bottom: 8px;
     }
+
     input, textarea, select {
       width: 100%;
-      padding: 12px;
-      background: #030307;
-      border: 1px solid var(--border-color);
-      border-radius: 5px;
+      padding: 14px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
       color: #fff;
-      box-sizing: border-box;
       font-size: 14px;
-      transition: all 0.3s ease;
+      box-sizing: border-box;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
+
     input:focus, textarea:focus, select:focus {
-      border-color: var(--accent-color);
-      box-shadow: 0 0 8px rgba(0, 255, 204, 0.2);
+      border-color: var(--accent);
+      box-shadow: 0 0 15px var(--accent-glow);
+      background: rgba(0, 0, 0, 0.5);
       outline: none;
     }
-    .row {
-      display: flex;
-      gap: 15px;
-    }
-    .row .form-group { flex: 1; }
-    button {
-      width: 100%;
-      padding: 14px;
-      background: transparent;
-      border: 2px solid var(--accent-color);
-      color: var(--accent-color);
-      font-weight: bold;
-      font-size: 15px;
+
+    /* File Input Design */
+    .file-input-wrapper {
+      position: relative;
+      border: 1px dashed var(--glass-border);
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
       cursor: pointer;
-      border-radius: 5px;
       transition: all 0.3s ease;
-      text-transform: uppercase;
+    }
+    .file-input-wrapper:hover {
+      border-color: var(--accent);
+      background: rgba(0, 255, 204, 0.02);
+    }
+    .file-input-wrapper input[type="file"] {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      opacity: 0; cursor: pointer;
+    }
+
+    /* Premium Button & Animation */
+    .btn-submit {
+      width: 100%;
+      padding: 16px;
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 15px;
       letter-spacing: 1px;
+      border-radius: 8px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+      text-transform: uppercase;
       margin-top: 10px;
     }
-    button:hover {
-      background: var(--accent-color);
+
+    .btn-submit:hover {
+      background: var(--accent);
       color: #000;
-      box-shadow: 0 0 15px var(--accent-color);
+      box-shadow: 0 0 25px var(--accent-glow);
     }
-    .preview-header {
-      background: #151525;
-      padding: 10px 15px;
-      border-radius: 5px 5px 0 0;
-      border: 1px solid var(--border-color);
-      font-size: 13px;
+
+    /* Sending State Animation */
+    .btn-submit.sending {
+      color: transparent;
+      background: rgba(0, 255, 204, 0.1);
+      pointer-events: none;
     }
-    .preview-box {
-      background: #ffffff;
-      color: #000000;
-      padding: 20px;
-      border-radius: 0 0 5px 5px;
-      min-height: 400px;
+    .btn-submit.sending::after {
+      content: "";
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      top: 50%; left: 50%;
+      margin-top: -12px; margin-left: -12px;
+      border: 3px solid transparent;
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    /* Inbox / Mail List Style */
+    .mail-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 580px;
       overflow-y: auto;
-      border: 1px solid var(--border-color);
-      border-top: none;
+      padding-right: 5px;
     }
+
+    .mail-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--glass-border);
+      padding: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      animation: slideIn 0.4s ease forwards;
+    }
+
+    .mail-item:hover {
+      border-color: var(--accent);
+      background: rgba(255, 255, 255, 0.04);
+      transform: translateX(5px);
+    }
+
+    .mail-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-width: 80%;
+    }
+
+    .mail-recipient {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .mail-subject {
+      font-size: 13px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .mail-meta {
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+      text-align: right;
+    }
+
+    .no-mail {
+      text-align: center;
+      color: var(--text-muted);
+      padding: 40px;
+      font-size: 14px;
+    }
+
+    /* Advanced Popup Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-window {
+      background: #11111e;
+      border: 1px solid var(--glass-border);
+      width: 90%;
+      max-width: 650px;
+      border-radius: 16px;
+      overflow: hidden;
+      transform: scale(0.9);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.8);
+    }
+
+    .modal-overlay.active .modal-window {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      background: rgba(255,255,255,0.02);
+      padding: 20px;
+      border-bottom: 1px solid var(--glass-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 22px;
+      cursor: pointer;
+    }
+    .modal-close:hover { color: #fff; }
+
+    .modal-body {
+      padding: 25px;
+      max-height: 400px;
+      overflow-y: auto;
+      background: #ffffff;
+      color: #000;
+    }
+
+    /* Keyframe Animations */
+    @keyframes typing { from { width: 0 } to { width: 100% } }
+    @keyframes blink { from, to { border-color: transparent } 50% { border-color: var(--accent) } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
 
-<div class="container">
+<div class="app-container">
   <header>
-    <h1>⚙️ CSM ULTRA-SMART EMAIL BROADCASTER ⚙️</h1>
-    <p style="font-size: 13px; color: #667; margin: 5px 0 0 0;">SYSTEM STATUS: FULLY DYNAMIC CONTROL</p>
+    <h1>PREMIUM HUB BROADCASTER</h1>
+    <div class="typing-effect">SYSTEM STATUS: FULL DYNAMIC LAYER ATTACHED</div>
   </header>
 
-  <div class="grid">
-    <!-- কন্ট্রোল প্যানেল ফর্ম -->
-    <div class="card">
-      <form id="broadcasterForm">
-        <div class="row">
+  <div class="app-grid">
+    <!-- ১. আল্ট্রা কন্ট্রোল প্যানেল কার্ড -->
+    <div class="glass-card">
+      <div class="panel-title">⚙️ Compose Engine</div>
+      <form id="premiumForm">
+        <div class="form-row">
           <div class="form-group">
-            <label>Sender Display Name</label>
-            <input type="text" id="fromName" value="CSM Mohasin Alam" required oninput="updateLiveMeta()">
+            <label>Sender Identity (Name)</label>
+            <input type="text" id="fromName" value="CSM Mohasin Alam" required>
           </div>
           <div class="form-group">
-            <label>Sender Prefix (@mohasin.bro.bd)</label>
-            <input type="text" id="fromPrefix" value="hello" required oninput="updateLiveMeta()">
+            <label>Prefix (@mohasin.bro.bd)</label>
+            <input type="text" id="fromPrefix" value="hello" required>
           </div>
         </div>
 
-        <div class="form-group">
-          <label>Reply-To Email Address</label>
-          <input type="email" id="replyTo" value="csm.mohasin@gmail.com">
-        </div>
-
-        <div class="form-group">
-          <label>Recipient Email (To)</label>
-          <input type="email" id="toEmail" placeholder="target@example.com" required>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Reply-To Gateway</label>
+            <input type="email" id="replyTo" value="csm.mohasin@gmail.com">
+          </div>
+          <div class="form-group">
+            <label>Recipient Address (To)</label>
+            <input type="email" id="toEmail" placeholder="client@example.com" required>
+          </div>
         </div>
 
         <div class="form-group">
           <label>Subject Line</label>
-          <input type="text" id="subject" placeholder="ইমেইলের সাবজেক্ট লিখুন..." required oninput="updateLiveMeta()">
+          <input type="text" id="subject" placeholder="ইমেইল সাবজেক্ট টাইপ করুন..." required>
         </div>
 
         <div class="form-group">
-          <label>Content Format</label>
-          <select id="bodyType" onchange="updateLivePreview()">
-            <option value="html">🔥 Rich HTML Format (Full Custom Layout)</option>
-            <option value="text">📄 Plain Text Format (Simple Raw Text)</option>
+          <label>Payload Type</label>
+          <select id="bodyType">
+            <option value="html">Rich HTML Layout Engine</option>
+            <option value="text">Plain Text Format</option>
           </select>
         </div>
 
         <div class="form-group">
           <label>Email Body / Source Code</label>
-          <textarea id="emailContent" rows="12" placeholder="এখানে আপনার কাস্টম HTML কোড অথবা সাধারণ বার্তাটি লিখুন..." oninput="updateLivePreview()" required></textarea>
+          <textarea id="emailContent" rows="8" placeholder="এখানে মেইলের টেক্সট অথবা ফুল কাস্টম HTML কোড লিখুন..." required></textarea>
         </div>
 
-        <button type="submit" id="broadcastBtn">📡 Launch Broadcast</button>
+        <!-- ফাইল অ্যাটাচমেন্ট সেকশন -->
+        <div class="form-group">
+          <label>Document Attachment (Optional)</label>
+          <div class="file-input-wrapper">
+            <span id="fileLabel">📁 Drop file here or Click to upload</span>
+            <input type="file" id="fileAttach">
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">Launch Broadcast</button>
       </form>
     </div>
 
-    <!-- রিয়েল-টাইম প্রিভিউ স্ক্রিন -->
-    <div>
-      <div class="preview-header">
-        <strong style="color: var(--accent-color);">📧 Live Mail Inspector</strong><br>
-        <span id="metaFrom" style="color: #aaa;">From: CSM Mohasin Alam &lt;hello@mohasin.bro.bd&gt;</span><br>
-        <span id="metaSubject" style="color: #aaa;">Subject: (No Subject)</span>
-      </div>
-      <div class="preview-box" id="livePreviewContainer">
-        <!-- এখানে লাইভ কোড রেন্ডার হবে -->
+    <!-- ২. জিমেইল স্টাইল সেন্ট মেইল লিস্ট -->
+    <div class="glass-card">
+      <div class="panel-title">📬 Sent Ledger Logs</div>
+      <div class="mail-list" id="mailListContainer">
+        <!-- জাভাস্ক্রিপ্ট দিয়ে ডাইনামিক লিস্ট আসবে -->
       </div>
     </div>
   </div>
 </div>
 
+<!-- ৩. প্রিভিউ মোডাল পপআপ উইন্ডো -->
+<div class="modal-overlay" id="previewModal">
+  <div class="modal-window">
+    <div class="modal-header">
+      <div>
+        <h3 id="modalSubject" style="margin:0 0 5px 0; color: var(--accent);"></h3>
+        <span id="modalMeta" style="font-size: 12px; color: var(--text-muted);"></span>
+      </div>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <!-- মেইলের কনটেন্ট এখানে রেন্ডার হবে -->
+    </div>
+  </div>
+</div>
+
 <script>
-  // এখানে তোমার নতুন তৈরি করা ক্লাউডফ্লেয়ার ওয়ার্কারের লাইভ URL বসাবে
-  const CLOUDFLARE_WORKER_URL = "https://blue-bush-b386.futurebd.workers.dev/";
+  // ক্লাউডফ্লেয়ার ওয়ার্কারের লাইভ ইউআরএল
+  const CLOUDFLARE_WORKER_URL = "https://admin.futurebd.workers.dev/";
+  
+  let base64File = null;
+  let filenameFile = null;
 
-  function updateLiveMeta() {
-    const fromName = document.getElementById('fromName').value;
-    const fromPrefix = document.getElementById('fromPrefix').value;
-    const subject = document.getElementById('subject').value;
+  // ফাইলকে Base64 এ কনভার্ট করার ইভেন্ট লিসেনার
+  document.getElementById('fileAttach').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    filenameFile = file.name;
+    document.getElementById('fileLabel').innerText = `✅ Loaded: ${file.name}`;
 
-    document.getElementById('metaFrom').innerHTML = `From: <strong>${fromName}</strong> &lt;${fromPrefix}@mohasin.bro.bd&gt;`;
-    document.getElementById('metaSubject').innerHTML = `Subject: <strong>${subject || '(No Subject)'}</strong>`;
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      // শুধু পিওর বেস৬৪ ডাটাটুকু নেওয়ার জন্য স্প্লিট করা
+      base64File = event.target.result.split(',')[1];
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // লোকাল স্টোরেজ থেকে সেন্ট মেইল লোড করা
+  function getLogs() {
+    return JSON.parse(localStorage.getItem('csm_mail_logs')) || [];
   }
 
-  function updateLivePreview() {
-    const content = document.getElementById('emailContent').value;
-    const bodyType = document.getElementById('bodyType').value;
-    const previewContainer = document.getElementById('livePreviewContainer');
+  function saveLog(log) {
+    const logs = getLogs();
+    logs.unshift(log); // নতুন মেইল সবার ওপরে থাকবে
+    localStorage.setItem('csm_mail_logs', JSON.stringify(logs));
+    renderLogs();
+  }
 
-    if (bodyType === 'html') {
-      previewContainer.innerHTML = content;
-    } else {
-      previewContainer.innerHTML = content.replace(/\n/g, '<br>');
+  function renderLogs() {
+    const container = document.getElementById('mailListContainer');
+    const logs = getLogs();
+
+    if (logs.length === 0) {
+      container.innerHTML = `<div class="no-mail">কোনো ইমেইল হিস্টোরি পাওয়া যায়নি।</div>`;
+      return;
     }
+
+    container.innerHTML = logs.map((log, index) => `
+      <div class="mail-item" onclick="openModal(${index})">
+        <div class="mail-info">
+          <span class="mail-recipient">To: ${log.toEmail}</span>
+          <span class="mail-subject">${log.subject}</span>
+        </div>
+        <div class="mail-meta">
+          <span>${log.time}</span>
+          ${log.hasAttachment ? '<div style="color:var(--accent); font-size:10px; margin-top:2px;">📎 Attached</div>' : ''}
+        </div>
+      </div>
+    `).join('');
   }
 
-  // ইনিশিয়াল প্রিভিউ লোড
-  updateLiveMeta();
-  updateLivePreview();
+  // পপআপ মোডাল ওপেন করা
+  window.openModal = function(index) {
+    const logs = getLogs();
+    const log = logs[index];
+    
+    document.getElementById('modalSubject').innerText = log.subject;
+    document.getElementById('modalMeta').innerHTML = `From: <b>${log.fromName}</b> (${log.fromPrefix}@mohasin.bro.bd)<br>To: ${log.toEmail} | ${log.time}`;
+    
+    const bodyContainer = document.getElementById('modalBody');
+    if (log.bodyType === 'html') {
+      bodyContainer.innerHTML = log.content;
+    } else {
+      bodyContainer.innerHTML = log.content.replace(/\n/g, '<br>');
+    }
 
-  // ফর্ম সাবমিট হ্যান্ডলার
-  document.getElementById('broadcasterForm').addEventListener('submit', async (e) => {
+    document.getElementById('previewModal').classList.add('active');
+  }
+
+  window.closeModal = function() {
+    document.getElementById('previewModal').classList.remove('active');
+  }
+
+  // ফর্ম সাবমিশন এবং অ্যানিমেশন হ্যান্ডলিং
+  document.getElementById('premiumForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const btn = document.getElementById('broadcastBtn');
-    btn.innerText = "⚡ BROADCASTING IN PROGRESS...";
-    btn.disabled = true;
+    const btn = document.getElementById('submitBtn');
+    btn.classList.add('sending'); // অ্যানিমেশন ক্লাস চালু
 
     const payload = {
       fromName: document.getElementById('fromName').value,
@@ -234,7 +508,8 @@
       toEmail: document.getElementById('toEmail').value,
       subject: document.getElementById('subject').value,
       bodyType: document.getElementById('bodyType').value,
-      content: document.getElementById('emailContent').value
+      content: document.getElementById('emailContent').value,
+      attachment: base64File ? { content: base64File, filename: filenameFile } : null
     };
 
     try {
@@ -246,17 +521,35 @@
 
       const result = await response.json();
       if (result.success) {
-        alert("🚀 মেইল সফলভাবে পাঠানো হয়েছে!");
+        // হিস্টোরি লগে সেভ করার ডাটা রেডি
+        const now = new Date();
+        const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        saveLog({
+          ...payload,
+          time: timeString,
+          hasAttachment: !!base64File
+        });
+
+        alert("🚀 প্রফেশনাল ব্রডকাস্ট সফলভাবে কমপ্লিট হয়েছে!");
+        
+        // ফাইল ইনপুট রিসেট
+        document.getElementById('fileAttach').value = '';
+        document.getElementById('fileLabel').innerText = `📁 Drop file here or Click to upload`;
+        base64File = null;
+        filenameFile = null;
       } else {
-        alert("❌ এরর ঘটেছে: " + result.error);
+        alert("❌ এরর: " + result.error);
       }
     } catch (error) {
-      alert("❌ ব্যাকএন্ড সার্ভারের সাথে কানেক্ট করা যাচ্ছে না!");
+      alert("❌ ব্যাকএন্ড আর্কিটেকচারের সাথে কানেক্ট করা সম্ভব হয়নি!");
     } finally {
-      btn.innerText = "📡 Launch Broadcast";
-      btn.disabled = false;
+      btn.classList.remove('sending'); // অ্যানিমেশন স্টপ
     }
   });
+
+  // পেজ লোড হলে হিস্টোরি রেন্ডার হবে
+  renderLogs();
 </script>
 
 </body>
