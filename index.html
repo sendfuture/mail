@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSM | Ultra Smart Email Broadcaster</title>
+  <style>
+    :root {
+      --bg-color: #06060c;
+      --card-bg: #0d0d1a;
+      --accent-color: #00ffcc;
+      --accent-dim: #00b38f;
+      --text-color: #ffffff;
+      --border-color: #1a1a3a;
+    }
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    header h1 {
+      color: var(--accent-color);
+      margin: 0;
+      font-size: 26px;
+      text-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+    }
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 25px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--accent-color);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      background: #030307;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      color: #fff;
+      box-sizing: border-box;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 8px rgba(0, 255, 204, 0.2);
+      outline: none;
+    }
+    .row {
+      display: flex;
+      gap: 15px;
+    }
+    .row .form-group { flex: 1; }
+    button {
+      width: 100%;
+      padding: 14px;
+      background: transparent;
+      border: 2px solid var(--accent-color);
+      color: var(--accent-color);
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 10px;
+    }
+    button:hover {
+      background: var(--accent-color);
+      color: #000;
+      box-shadow: 0 0 15px var(--accent-color);
+    }
+    .preview-header {
+      background: #151525;
+      padding: 10px 15px;
+      border-radius: 5px 5px 0 0;
+      border: 1px solid var(--border-color);
+      font-size: 13px;
+    }
+    .preview-box {
+      background: #ffffff;
+      color: #000000;
+      padding: 20px;
+      border-radius: 0 0 5px 5px;
+      min-height: 400px;
+      overflow-y: auto;
+      border: 1px solid var(--border-color);
+      border-top: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>⚙️ CSM ULTRA-SMART EMAIL BROADCASTER ⚙️</h1>
+    <p style="font-size: 13px; color: #667; margin: 5px 0 0 0;">SYSTEM STATUS: FULLY DYNAMIC CONTROL</p>
+  </header>
+
+  <div class="grid">
+    <!-- কন্ট্রোল প্যানেল ফর্ম -->
+    <div class="card">
+      <form id="broadcasterForm">
+        <div class="row">
+          <div class="form-group">
+            <label>Sender Display Name</label>
+            <input type="text" id="fromName" value="CSM Mohasin Alam" required oninput="updateLiveMeta()">
+          </div>
+          <div class="form-group">
+            <label>Sender Prefix (@mohasin.bro.bd)</label>
+            <input type="text" id="fromPrefix" value="hello" required oninput="updateLiveMeta()">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Reply-To Email Address</label>
+          <input type="email" id="replyTo" value="csm.mohasin@gmail.com">
+        </div>
+
+        <div class="form-group">
+          <label>Recipient Email (To)</label>
+          <input type="email" id="toEmail" placeholder="target@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <label>Subject Line</label>
+          <input type="text" id="subject" placeholder="ইমেইলের সাবজেক্ট লিখুন..." required oninput="updateLiveMeta()">
+        </div>
+
+        <div class="form-group">
+          <label>Content Format</label>
+          <select id="bodyType" onchange="updateLivePreview()">
+            <option value="html">🔥 Rich HTML Format (Full Custom Layout)</option>
+            <option value="text">📄 Plain Text Format (Simple Raw Text)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Email Body / Source Code</label>
+          <textarea id="emailContent" rows="12" placeholder="এখানে আপনার কাস্টম HTML কোড অথবা সাধারণ বার্তাটি লিখুন..." oninput="updateLivePreview()" required></textarea>
+        </div>
+
+        <button type="submit" id="broadcastBtn">📡 Launch Broadcast</button>
+      </form>
+    </div>
+
+    <!-- রিয়েল-টাইম প্রিভিউ স্ক্রিন -->
+    <div>
+      <div class="preview-header">
+        <strong style="color: var(--accent-color);">📧 Live Mail Inspector</strong><br>
+        <span id="metaFrom" style="color: #aaa;">From: CSM Mohasin Alam &lt;hello@mohasin.bro.bd&gt;</span><br>
+        <span id="metaSubject" style="color: #aaa;">Subject: (No Subject)</span>
+      </div>
+      <div class="preview-box" id="livePreviewContainer">
+        <!-- এখানে লাইভ কোড রেন্ডার হবে -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // এখানে তোমার নতুন তৈরি করা ক্লাউডফ্লেয়ার ওয়ার্কারের লাইভ URL বসাবে
+  const CLOUDFLARE_WORKER_URL = "https://blue-bush-b386.futurebd.workers.dev/";
+
+  function updateLiveMeta() {
+    const fromName = document.getElementById('fromName').value;
+    const fromPrefix = document.getElementById('fromPrefix').value;
+    const subject = document.getElementById('subject').value;
+
+    document.getElementById('metaFrom').innerHTML = `From: <strong>${fromName}</strong> &lt;${fromPrefix}@mohasin.bro.bd&gt;`;
+    document.getElementById('metaSubject').innerHTML = `Subject: <strong>${subject || '(No Subject)'}</strong>`;
+  }
+
+  function updateLivePreview() {
+    const content = document.getElementById('emailContent').value;
+    const bodyType = document.getElementById('bodyType').value;
+    const previewContainer = document.getElementById('livePreviewContainer');
+
+    if (bodyType === 'html') {
+      previewContainer.innerHTML = content;
+    } else {
+      previewContainer.innerHTML = content.replace(/\n/g, '<br>');
+    }
+  }
+
+  // ইনিশিয়াল প্রিভিউ লোড
+  updateLiveMeta();
+  updateLivePreview();
+
+  // ফর্ম সাবমিট হ্যান্ডলার
+  document.getElementById('broadcasterForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('broadcastBtn');
+    btn.innerText = "⚡ BROADCASTING IN PROGRESS...";
+    btn.disabled = true;
+
+    const payload = {
+      fromName: document.getElementById('fromName').value,
+      fromPrefix: document.getElementById('fromPrefix').value,
+      replyTo: document.getElementById('replyTo').value,
+      toEmail: document.getElementById('toEmail').value,
+      subject: document.getElementById('subject').value,
+      bodyType: document.getElementById('bodyType').value,
+      content: document.getElementById('emailContent').value
+    };
+
+    try {
+      const response = await fetch(CLOUDFLARE_WORKER_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        alert("🚀 মেইল সফলভাবে পাঠানো হয়েছে!");
+      } else {
+        alert("❌ এরর ঘটেছে: " + result.error);
+      }
+    } catch (error) {
+      alert("❌ ব্যাকএন্ড সার্ভারের সাথে কানেক্ট করা যাচ্ছে না!");
+    } finally {
+      btn.innerText = "📡 Launch Broadcast";
+      btn.disabled = false;
+    }
+  });
+</script>
+
+</body>
+</html>
